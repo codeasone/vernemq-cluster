@@ -1,0 +1,40 @@
+version: '2.1'
+services:
+  # Use admin:password to log in
+  mqtt-broker:
+    image: haproxy
+    container_name: mqtt-broker
+    volumes:
+      - ./config:/usr/local/etc/haproxy/
+    ports:
+      - 1883:1883 # mqtt
+      - 8888:8888 # mqtt-api
+      - 8080:8080 # haproxy stats
+    depends_on:
+      - mqtt-a
+      - mqtt-b
+      - mqtt-c
+
+  mqtt-a:
+    image: vernemq
+    volumes:
+      - $HOME/.aws:/root/.aws
+      - ./data/vernemq/a:/var/lib/vernemq
+    ports:
+      - 1883
+
+  mqtt-b:
+    image: vernemq
+    volumes:
+      - $HOME/.aws:/root/.aws
+      - ./data/vernemq/b:/var/lib/vernemq
+    ports:
+      - 1883
+
+  mqtt-c:
+    image: vernemq
+    volumes:
+      - $HOME/.aws:/root/.aws
+      - ./data/vernemq/c:/var/lib/vernemq
+    ports:
+      - 1883
