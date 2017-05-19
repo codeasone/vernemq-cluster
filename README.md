@@ -6,6 +6,8 @@ Whilst investigating VerneMQ's data loss characteristics in the event of node lo
 CRASH REPORT Process <0.1065.0> with 0 neighbours crashed with reason: no case clause matching {{case_clause,{badrpc,nodedown}},[{vmq_reg,'-register_subscriber/4-fun-0-',2,[{file,"/opt/vernemq/distdir/1.0.1/_build/default/lib/vmq_server/src/vmq_reg.erl"},{line,182}]},{vmq_reg,block_until_migrated,4,[{file,"/opt/vernemq/distdir/1.0.1/_build/default/lib/vmq_server/src/vmq_reg.erl"},{line,249}]},{vmq_reg,register_subscriber,4,[{file,"/opt/vernemq/distdir/1.0.1/_build/default/lib/vmq_server/src/vmq_reg.erl"},{line,194}]},{vmq_reg_sync_action,'-init/1-fun-0-',1,[{file,"/opt/vernemq/distdi..."},...]}]} in vmq_mqtt_fsm:check_user/2 line 553
 ```
 
+This occurs when a subscriber reconnects following a node outage (see detailed steps below).
+
 I'd like to understand whether this is expected behaviour or a bug.
 
 Do the occurrences of such reports compromise the integrity and service-level of a cluster in any way?
