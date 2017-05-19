@@ -124,7 +124,7 @@ mqtt-a_1       | 2017-05-19 11:23:28.273 [info] <0.1064.0>@plumtree_metadata_exc
 
 __Question:__ That `CRASH REPORT` doesn't look right. Is cluster integrity compromised?
 
-11. Next, publish two more messages `D` and `E` in the test sequence `A (B C) D E` where `(B C)` only exist within the LevelDB `msgstore` of `mqtt-a`, which is still out of the picture...
+11. Next, publish two more messages `D` and `E` in the test sequence `A (B C) D E` where `(B C)` only exist within the LevelDB `msgstore` of `mqtt-c`, which is still out of the picture...
 
 As expected, those messages are received just fine:
 
@@ -167,7 +167,7 @@ Done
 2017-05-19 11:32:19.466 [info] <0.452.0>@plumtree_peer_service:attempt_join:50 Sent join request to: 'VerneMQ@172.26.0.4'
 ```
 
-- `(B C)` are immediately sent to our test subscriber, but overall order is still compromised `A D E B C`, which for certain causal dependencies of the problem at hand may (or may not) be viable.
+- `(B C)` are immediately sent to our test subscriber, but overall order is still compromised `A D E B C`, which given causal dependencies of the system-under-development may not be viable.
 
 # Observations
 
