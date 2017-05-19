@@ -24,11 +24,11 @@ Cost footprint should be negligible.
 
         aws s3api create-bucket --bucket vernemq-discovery --region eu-west-1
 
-1. Build the `vernemq` Docker image - this implements a crude form of S3-based service-discovery
+2. Build the `vernemq` Docker image - this implements a crude form of S3-based service-discovery
 
         make docker-build
 
-1. Bring up the cluster
+3. Bring up the cluster
 
         make docker-up
 
@@ -38,7 +38,7 @@ HAProxy reports healthy:
 
 ![](./images/ha-proxy-healthy.png)
 
-1. Confirm cluster formation
+4. Confirm cluster formation
 
         docker exec -it vernemqdataloss_mqtt-a_1 bash -c 'vmq-admin cluster show'
 
@@ -52,7 +52,7 @@ HAProxy reports healthy:
 +------------------+-------+
 ```
 
-1. Start test subscriber with `clean-session=false`
+5. Start test subscriber with `clean-session=false`
 
         mosquitto_sub -t resume-test -c -i resume-test -q 1 -d
 
@@ -60,7 +60,7 @@ __Note:__ I can see from the HAProxy stats that the subscriber connected to `mqt
 
 ![](./images/ha-proxy-initial-connect.png)
 
-1. Publish a test message "A"
+6. Publish a test message "A"
 
         mosquitto_pub -t resume-test -q 1 -d -m "A"
 
@@ -72,16 +72,16 @@ Client resume-test sending PUBACK (Mid: 1)
 A
 ```
 
-1. Disconnect test subscriber to simulate a temporary device failure (for the sake of discussion lets assume this is many minutes)
+7. Disconnect test subscriber to simulate a temporary device failure (for the sake of discussion lets assume this is many minutes)
 
         <kill mosquitto_sub process>
 
-1. Publish two more test messages which we expect our subscriber to resume on re-connection to the cluster
+8. Publish two more test messages which we expect our subscriber to resume on re-connection to the cluster
 
         mosquitto_pub -t resume-test -q 1 -d -m "B"
         mosquitto_pub -t resume-test -q 1 -d -m "C"
 
-1. Now we knock out `mqtt-c` ungracefully to simulate a real-life node failure or partition
+9. Now we knock out `mqtt-c` ungracefully to simulate a real-life node failure or partition
 
         docker-compose kill mqtt-c
 
@@ -97,7 +97,7 @@ HAProxy shows the node as down:
 
 ![](./images/ha-proxy-node-down.png)
 
-1. Reconnect the original test subscriber
+10. Reconnect the original test subscriber
 
         mosquitto_sub -t resume-test -c -i resume-test -q 1 -d
 
@@ -124,7 +124,7 @@ mqtt-a_1       | 2017-05-19 11:23:28.273 [info] <0.1064.0>@plumtree_metadata_exc
 
 __Question:__ That `CRASH REPORT` doesn't look right. Is cluster integrity compromised?
 
-1. Next, publish two more messages `D` and `E` in the test sequence `A (B C) D E` where `(B C)` only exist within the LevelDB `msgstore` of `mqtt-a`, which is still out of the picture...
+11. Next, publish two more messages `D` and `E` in the test sequence `A (B C) D E` where `(B C)` only exist within the LevelDB `msgstore` of `mqtt-a`, which is still out of the picture...
 
 As expected, those messages are received just fine:
 
@@ -139,7 +139,7 @@ E
 
 So far, our test subscriber has received `A D E`.
 
-1. Restore node `mqtt-c`
+12. Restore node `mqtt-c`
 
 ```
 docker-compose run mqtt-c
