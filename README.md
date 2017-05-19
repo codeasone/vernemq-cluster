@@ -189,3 +189,7 @@ allow_unsubscribe_during_netsplit = on
 - Increased availability comes at the cost of linearizability.
 
 - `CRASH REPORT` log entries suggest cluster state may be compromised.
+
+# Open Issues
+
+- What is the period between LevelDB flushes/syncs? Is data loss inevitable if a node dies before having a chance to sync offline message queues?
