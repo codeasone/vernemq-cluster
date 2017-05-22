@@ -1,5 +1,7 @@
 # VerneMQ cluster partition
 
+Demonstration of issue to aid responders to [this issue](https://github.com/erlio/vernemq/issues/390)
+
 Whilst investigating VerneMQ's data loss characteristics in the event of node loss and partitioning, I've encountered Erlang `CRASH REPORT` occurrences in the debug logs.
 
 ```
